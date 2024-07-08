@@ -13,6 +13,7 @@ private:
 	View view;
 
 public: 
-	Aplication(): window(sf::VideoMode(1920,1080), "TestWindow"), model(), view(this->model, this->window), controller(this->model, this->view) {}
+	// todo dynamic screen resolution
+	Aplication(): window(sf::VideoMode(1920,1080), "TestWindow"), model(), view(this->model, this->window), controller(this->model, this->view) {} 
 	void run();
 };

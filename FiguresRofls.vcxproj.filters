@@ -26,9 +26,6 @@
     <ClInclude Include="Headers\Controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Headers\Figure.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Headers\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>

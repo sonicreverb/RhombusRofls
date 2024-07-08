@@ -136,7 +136,6 @@
   <ItemGroup>
     <ClInclude Include="Headers\Application.h" />
     <ClInclude Include="Headers\Controller.h" />
-    <ClInclude Include="Headers\Figure.h" />
     <ClInclude Include="Headers\Model.h" />
     <ClInclude Include="Headers\View.h" />
   </ItemGroup>
