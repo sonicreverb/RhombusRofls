@@ -6,11 +6,13 @@
 
 class Aplication {
 private:	
+	sf::RenderWindow window;
+
 	Model model;
 	Controller controller;
 	View view;
 
 public: 
-	Aplication(): model(), view(this->model), controller(this->model, this->view) {}
-	void run() { return; }
+	Aplication(): window(sf::VideoMode(1920,1080), "TestWindow"), model(), view(this->model, this->window), controller(this->model, this->view) {}
+	void run();
 };
