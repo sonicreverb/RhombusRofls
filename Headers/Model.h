@@ -7,19 +7,22 @@ using namespace std;
 
 class Figure {
 private:
-	pair<float, float> coords;
+	sf::Vector2f coords;
 	float size;
 	sf::Color color;
 
 public:
 	virtual void move(float offsetX, float offsetY) = 0;
+	virtual void rotate() = 0;
 	virtual void display(sf::RenderWindow& window) = 0;
 
-	pair<double, double> getCoords() { return this->coords; }
-	double getX() { return this->coords.first; }
-	double getY() { return this->coords.second; }
+	sf::Vector2f getCoords() { return this->coords; }
+	double getX() { return this->coords.x; }
+	double getY() { return this->coords.y; }
 	float getSize() { return this->size; }
 
+	void setCoords(float x, float y) { this->coords = sf::Vector2f(x, y); }
+	void setCoords(sf::Vector2f _coords) { this->coords = _coords; }
 	virtual void setColor(sf::Color _color);
 	void setSize(float _size);
 };
@@ -45,10 +48,13 @@ public:
 
 	void move(float offsetX, float offsetY) override;
 	void display(sf::RenderWindow& window) override;
-	void rotate();
+	void rotate() override;
+
+	sf::ConvexShape& accessShape() { return this->shape; }
 
 	void setColor(sf::Color _color) override;
 	void setScale(float scale);
+	void updateCoords() { this->setCoords(this->shape.getPosition()); }
 };
 
 class Model {

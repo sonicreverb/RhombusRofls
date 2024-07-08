@@ -10,5 +10,6 @@ private:
 public:
 	Controller(Model& _model, View& _view) : model(_model), view(_view) {};
 
+	void update();
 	void handleInput();
 };

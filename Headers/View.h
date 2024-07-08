@@ -2,6 +2,10 @@
 #include "Model.h"
 #include <SFML/Graphics.hpp>
 
+// todo dynamic resolution
+#define WINDOW_WIDTH 1920
+#define WINDOW_HEIGHT 1080
+
 class View {
 private:
 	sf::RenderWindow& window;

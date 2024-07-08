@@ -14,6 +14,6 @@ private:
 
 public: 
 	// todo dynamic screen resolution
-	Aplication(): window(sf::VideoMode(1920,1080), "TestWindow"), model(), view(this->model, this->window), controller(this->model, this->view) {} 
+	Aplication(): window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RhombusRofls"), model(), view(this->model, this->window), controller(this->model, this->view) {} 
 	void run();
 };
