@@ -39,7 +39,7 @@ void Figure::editRotationVelocity(float _value)
 bool Figure::melt()
 {
 	sf::Color currentColor = this->getColor();
-	sf::Color newColor(currentColor.r, currentColor.g, currentColor.b, currentColor.a - 2.5);
+	sf::Color newColor(currentColor.r, currentColor.g, currentColor.b, currentColor.a - 1.25);
 	this->setColor(newColor);
 	return newColor.a <= 0;
 }
