@@ -6,8 +6,11 @@ class View {
 private:
 	sf::RenderWindow& window;
 	Model& model;
+	sf::Text instructionsText;
+	sf::Font font;
 public:
-	View(Model& _model, sf::RenderWindow& _window): model(_model), window(_window) {}
+
+	View(Model& _model, sf::RenderWindow& _window);
 
 	void render();
 
