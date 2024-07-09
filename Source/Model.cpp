@@ -11,7 +11,7 @@ void Figure::setSize(float _size)
 	this->size = _size;
 }
 
-Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(0.2), velocity(ScreenResolution::getWindowHeight() / 700), scale(1.f)
+Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(100), velocity(ScreenResolution::getWindowHeight() / 7), scale(1.f)
 {
 	shape.setPointCount(4);
 	shape.setPoint(0, sf::Vector2f(-_size / 2, 0));
@@ -24,9 +24,9 @@ Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(0.2), velocity(
 	this->setColor(RhombToSfColorAdapter(static_cast<RhombColors>(rand() % 6)));
 }
 
-void Rhombus::move()
+void Rhombus::move(float _deltaTime)
 {
-	this->shape.move(0, this->velocity);
+	this->shape.move(0, this->velocity * _deltaTime);
 	this->updateCoords();
 }
 
@@ -41,9 +41,9 @@ void Rhombus::display(sf::RenderWindow& _window)
 	_window.draw(this->shape);
 }
 
-void Rhombus::rotate()
+void Rhombus::rotate(float _deltaTime)
 {
-	this->shape.rotate(this->rotationAngle);
+	this->shape.rotate(this->rotationAngle * _deltaTime);
 }
 
 void Rhombus::setColor(sf::Color _color)

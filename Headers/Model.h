@@ -12,9 +12,9 @@ private:
 	sf::Color color;
 
 public:
-	virtual void move() = 0;
-	virtual void move(float offsetX, float offsetY) = 0;
-	virtual void rotate() = 0;
+	virtual void move(float _deltaTime) = 0;
+	virtual void move(float _offsetX, float _offsetY) = 0;
+	virtual void rotate(float _deltaTime) = 0;
 	virtual void display(sf::RenderWindow& window) = 0;
 
 	sf::Vector2f getCoords() { return this->coords; }
@@ -46,12 +46,12 @@ private:
 	float velocity;
 	float rotationAngle;
 public:
-	Rhombus(float x, float y, float size);
+	Rhombus(float _x, float _y, float _size);
 
-	void move() override;
-	void move(float offsetX, float offsetY) override;
+	void move(float _deltaTime) override;
+	void move(float _offsetX, float _offsetY) override;
 	void display(sf::RenderWindow& window) override;
-	void rotate() override;
+	void rotate(float _deltaTime) override;
 
 	sf::ConvexShape& accessShape() { return this->shape; }
 

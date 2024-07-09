@@ -1,13 +1,13 @@
 #include "../Headers/Controller.h"
 #include "../Headers/ScreenResolution.h"
 
-void Controller::update()
+void Controller::update(float _deltaTime)
 {
     vector<Figure*>& modelObjects = this->model.accessObjects();
     if (!modelObjects.empty()) {
         for (auto object : modelObjects) {
-            object->move();
-            object->rotate();
+            object->move(_deltaTime);
+            object->rotate(_deltaTime);
 
             if (object->getY() - object->getSize() > ScreenResolution::getWindowHeight())
                 object->move(0, -1 * (object->getY() + object->getSize()));
