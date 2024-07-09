@@ -36,7 +36,7 @@ public:
 	float getVelocity() const { return this->velocity; }
 	float getRotationSpeed() const { return this->rotationSpeed; }
 	sf::Color getColor() const { return this->color; }
-	virtual vector<sf::Vector2f> getPoints() = 0;
+	virtual vector<sf::Vector2f> const getGlobalPoints() = 0;
 
 	virtual sf::ConvexShape& accessShape() = 0;
 	virtual void setCoords(float x, float y) { this->coords = sf::Vector2f(x, y); }
@@ -54,6 +54,8 @@ public:
 
 	virtual bool melt();
 	virtual void die() = 0;
+
+	virtual bool intersects(Figure* other) = 0;
 };
 
 enum class RhombColors {
@@ -78,7 +80,7 @@ public:
 	void rotate(float _deltaTime) override;
 
 	sf::ConvexShape& accessShape() override { return this->shape; }
-	vector<sf::Vector2f> getPoints() override;
+	vector<sf::Vector2f> const getGlobalPoints() override;
 
 	void setColor(sf::Color _color) override;
 	void setScale(float scale) override;
@@ -88,6 +90,9 @@ public:
 
 	bool melt() override;
 	void die() override;
+	
+	bool intersects(Figure* other);
+	bool checkSATIntersection(const vector<sf::Vector2f>& _pointsLhs, const vector<sf::Vector2f>& _pointsRhs);
 };
 
 class Model {

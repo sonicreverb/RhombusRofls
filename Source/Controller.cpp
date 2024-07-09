@@ -17,10 +17,18 @@ void Controller::update(float _deltaTime)
                 else if (object->getY() + object->getSize() < 0 && object->getVelocity() < 0)
                     object->setCoords(object->getX(), ScreenResolution::getWindowHeight() + object->getSize());
 
-                auto objectPoints = object->getPoints();
+                auto objectPoints = object->getGlobalPoints();
                 for (auto point : objectPoints) {
                     if (point.x < 0 || point.x > ScreenResolution::getWindowWidth())
                         object->die();
+                }
+
+                for (int supID = 0; supID < modelObjects.size(); supID++) {
+                    if (supID == id) continue;
+                    else if (object->intersects(modelObjects[supID])) {
+                        object->die();
+                        modelObjects[supID]->die();
+                    }
                 }
             }
             else {

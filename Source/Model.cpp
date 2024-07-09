@@ -92,7 +92,7 @@ void Rhombus::rotate(float _deltaTime)
 	this->shape.rotate(this->getRotationSpeed() * _deltaTime);
 }
 
-vector<sf::Vector2f> Rhombus::getPoints()
+vector<sf::Vector2f> const Rhombus::getGlobalPoints()
 {
 	vector<sf::Vector2f> points;
 	size_t pointCount = shape.getPointCount();
@@ -162,6 +162,53 @@ void Rhombus::die()
 	Figure::setRotationSpeed(0);
 	Figure::setVelocity(0);
 	Figure::setLive(false);
+}
+
+bool Rhombus::intersects(Figure* other)
+{
+	vector<sf::Vector2f> points1 = this->getGlobalPoints();
+	vector<sf::Vector2f> points2 = other->getGlobalPoints();
+
+	return checkSATIntersection(points1, points2);
+}
+
+bool Rhombus::checkSATIntersection(const vector<sf::Vector2f>& _pointsLhs, const vector<sf::Vector2f>& _pointsRhs)
+{
+	auto getEdgeNormal = [](const sf::Vector2f& p1, const sf::Vector2f& p2) -> sf::Vector2f {
+		sf::Vector2f edge = p2 - p1;
+		return sf::Vector2f(-edge.y, edge.x);
+		};
+
+	for (size_t i = 0; i < _pointsLhs.size(); ++i) {
+		size_t nextIndex = (i + 1) % _pointsLhs.size();
+
+		sf::Vector2f axis = getEdgeNormal(_pointsLhs[i], _pointsLhs[nextIndex]);
+
+		float length = std::sqrt(axis.x * axis.x + axis.y * axis.y);
+		axis /= length;
+
+		float min1 = std::numeric_limits<float>::max();
+		float max1 = -std::numeric_limits<float>::max();
+		float min2 = std::numeric_limits<float>::max();
+		float max2 = -std::numeric_limits<float>::max();
+
+		for (const auto& point : _pointsLhs) {
+			float projection = point.x * axis.x + point.y * axis.y;
+			if (projection < min1) min1 = projection;
+			if (projection > max1) max1 = projection;
+		}
+
+		for (const auto& point : _pointsRhs) {
+			float projection = point.x * axis.x + point.y * axis.y;
+			if (projection < min2) min2 = projection;
+			if (projection > max2) max2 = projection;
+		}
+
+		if (!(max1 >= min2 && max2 >= min1))
+			return false;
+	}
+
+	return true;
 }
 
 sf::Color RhombToSfColorAdapter(RhombColors _color)
