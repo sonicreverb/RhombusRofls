@@ -48,25 +48,27 @@ void Controller::handleInput() {
             view.accessWindow().close();
 
         else if (event.type == sf::Event::KeyPressed) {
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-                if (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)
-                    this->model.accessActiveFigure()->setScale(1.1);
-                else if (event.key.code == sf::Keyboard::Hyphen || event.key.code == sf::Keyboard::Subtract)
-                    this->model.accessActiveFigure()->setScale(0.91);
-            }
+            if (this->model.accessActiveFigure() != nullptr) {
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+                    if (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)
+                        this->model.accessActiveFigure()->setScale(1.1);
+                    else if (event.key.code == sf::Keyboard::Hyphen || event.key.code == sf::Keyboard::Subtract)
+                        this->model.accessActiveFigure()->setScale(0.91);
+                }
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
-                if (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)
-                    this->model.accessActiveFigure()->editRotationVelocity(20);
-                else if (event.key.code == sf::Keyboard::Hyphen || event.key.code == sf::Keyboard::Subtract)
-                    this->model.accessActiveFigure()->editRotationVelocity(-20);
-            }
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::R)) {
+                    if (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)
+                        this->model.accessActiveFigure()->editRotationVelocity(20);
+                    else if (event.key.code == sf::Keyboard::Hyphen || event.key.code == sf::Keyboard::Subtract)
+                        this->model.accessActiveFigure()->editRotationVelocity(-20);
+                }
 
-            if (sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
-                if (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)
-                    this->model.accessActiveFigure()->editVelocity(20);
-                else if (event.key.code == sf::Keyboard::Hyphen || event.key.code == sf::Keyboard::Subtract)
-                    this->model.accessActiveFigure()->editVelocity(-20);
+                if (sf::Keyboard::isKeyPressed(sf::Keyboard::V)) {
+                    if (event.key.code == sf::Keyboard::Equal || event.key.code == sf::Keyboard::Add)
+                        this->model.accessActiveFigure()->editVelocity(20);
+                    else if (event.key.code == sf::Keyboard::Hyphen || event.key.code == sf::Keyboard::Subtract)
+                        this->model.accessActiveFigure()->editVelocity(-20);
+                }
             }
 
             switch (event.key.code) {
