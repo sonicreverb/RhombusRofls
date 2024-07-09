@@ -163,7 +163,8 @@ void Model::addRandomRhomb()
 	if (this->accessObjects().size() == 10)
 		this->accessObjects()[rand() % 10]->die();
 	else if (this->accessObjects().size() < 10) {
-		Rhombus* addedObject = new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20);
+		Rhombus* addedObject = new Rhombus(rand() % ScreenResolution::getWindowWidth() * 0.8 + ScreenResolution::getWindowWidth() * 0.1,
+			rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20);
 
 		this->switchActivityTo(addedObject);
 		this->objects.push_back(addedObject);
