@@ -19,15 +19,21 @@ void Figure::setScale(float _scale)
 void Figure::editVelocity(float _value)
 {
 	float currentVelocity = this->getVelocity();
-	currentVelocity += _value;
-	this->setVelocity(currentVelocity);
+	if ((currentVelocity < ScreenResolution::getWindowHeight() && _value > 0) ||
+		(currentVelocity > -1 * ScreenResolution::getWindowHeight() && _value < 0)) {
+		currentVelocity += _value;
+		this->setVelocity(currentVelocity);
+	}
 }
 
 void Figure::editRotationVelocity(float _value)
 {
 	float currentRotationVelocity = this->getRotationSpeed();
-	currentRotationVelocity += _value;
-	this->setRotationSpeed(currentRotationVelocity);
+	if ((currentRotationVelocity < ScreenResolution::getWindowHeight() / 2 && _value > 0) ||
+		(currentRotationVelocity > -1 * ScreenResolution::getWindowHeight() / 2 && _value < 0)) {
+		currentRotationVelocity += _value;
+		this->setRotationSpeed(currentRotationVelocity);
+	}
 }
 
 bool Figure::melt()
@@ -84,6 +90,30 @@ void Rhombus::display(sf::RenderWindow& _window)
 void Rhombus::rotate(float _deltaTime)
 {
 	this->shape.rotate(this->getRotationSpeed() * _deltaTime);
+}
+
+vector<sf::Vector2f> Rhombus::getPoints()
+{
+	vector<sf::Vector2f> points;
+	size_t pointCount = shape.getPointCount();
+	sf::Vector2f position = shape.getPosition();
+	sf::Vector2f scale = shape.getScale();
+	float rotation = shape.getRotation();
+	float radians = rotation * 3.14159265358979323846 / 180.0;
+
+	for (size_t i = 0; i < pointCount; ++i) {
+		sf::Vector2f point = shape.getPoint(i);
+
+		point.x *= scale.x;
+		point.y *= scale.y;
+
+		float rotatedX = point.x * std::cos(radians) - point.y * std::sin(radians);
+		float rotatedY = point.x * std::sin(radians) + point.y * std::cos(radians);
+
+		points.push_back(sf::Vector2f(rotatedX, rotatedY) + position);
+	}
+
+	return points;
 }
 
 void Rhombus::setColor(sf::Color _color)

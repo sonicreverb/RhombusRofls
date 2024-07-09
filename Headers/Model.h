@@ -36,6 +36,7 @@ public:
 	float getVelocity() const { return this->velocity; }
 	float getRotationSpeed() const { return this->rotationSpeed; }
 	sf::Color getColor() const { return this->color; }
+	virtual vector<sf::Vector2f> getPoints() = 0;
 
 	virtual sf::ConvexShape& accessShape() = 0;
 	virtual void setCoords(float x, float y) { this->coords = sf::Vector2f(x, y); }
@@ -77,6 +78,7 @@ public:
 	void rotate(float _deltaTime) override;
 
 	sf::ConvexShape& accessShape() override { return this->shape; }
+	vector<sf::Vector2f> getPoints() override;
 
 	void setColor(sf::Color _color) override;
 	void setScale(float scale) override;

@@ -16,6 +16,12 @@ void Controller::update(float _deltaTime)
                     object->setCoords(object->getX(), 0 - object->getSize());
                 else if (object->getY() + object->getSize() < 0 && object->getVelocity() < 0)
                     object->setCoords(object->getX(), ScreenResolution::getWindowHeight() + object->getSize());
+
+                auto objectPoints = object->getPoints();
+                for (auto point : objectPoints) {
+                    if (point.x < 0 || point.x > ScreenResolution::getWindowWidth())
+                        object->die();
+                }
             }
             else {
                 if (object->melt()) {
