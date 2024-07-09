@@ -10,6 +10,7 @@ private:
 	sf::Vector2f coords;
 	float size;
 	sf::Color color;
+	bool activity;
 
 public:
 	virtual void move(float _deltaTime) = 0;
@@ -21,11 +22,13 @@ public:
 	double getX() { return this->coords.x; }
 	double getY() { return this->coords.y; }
 	float getSize() { return this->size; }
+	bool isActive() { return this->activity; }
 
 	void setCoords(float x, float y) { this->coords = sf::Vector2f(x, y); }
 	void setCoords(sf::Vector2f _coords) { this->coords = _coords; }
 	virtual void setColor(sf::Color _color);
 	void setSize(float _size);
+	void setActivity(bool _activity) { this->activity = _activity; }
 };
 
 enum class RhombColors {
@@ -63,8 +66,12 @@ public:
 class Model {
 private:
 	vector<Figure*> objects;
+	Figure* activeFigure = nullptr;
 public:
 	void addRandomRhomb();
 
+	Figure* accessActiveFigure() { return this->activeFigure; }
 	vector<Figure*>& accessObjects() { return this->objects; }
+
+	void setActiveFigure(Figure* _figure) { this->activeFigure = _figure; }
 };

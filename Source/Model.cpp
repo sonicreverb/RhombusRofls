@@ -22,6 +22,7 @@ Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(100), velocity(
 
 	this->setSize(_size);
 	this->setColor(RhombToSfColorAdapter(static_cast<RhombColors>(rand() % 6)));
+	this->setActivity(false);
 }
 
 void Rhombus::move(float _deltaTime)
@@ -39,6 +40,12 @@ void Rhombus::move(float _offsetX, float _offsetY)
 void Rhombus::display(sf::RenderWindow& _window)
 {
 	_window.draw(this->shape);
+	if (this->isActive()) {
+		sf::ConvexShape activityShape = this->shape;
+		activityShape.setScale(0.8, 0.8);
+		activityShape.setFillColor(sf::Color::White);
+		_window.draw(activityShape);
+	}
 }
 
 void Rhombus::rotate(float _deltaTime)
@@ -87,5 +94,14 @@ sf::Color RhombToSfColorAdapter(RhombColors _color)
 
 void Model::addRandomRhomb()
 {
-	this->objects.push_back(new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20));
+	Rhombus* addedObject = new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20);
+	
+	Figure* activeObject = this->accessActiveFigure();
+	if (activeObject != nullptr)
+		activeObject->setActivity(false);
+
+	this->setActiveFigure(addedObject);
+	addedObject->setActivity(true);
+
+	this->objects.push_back(addedObject);
 }
