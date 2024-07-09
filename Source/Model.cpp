@@ -125,6 +125,10 @@ bool Rhombus::melt()
 
 void Rhombus::die()
 {
+	if (this->isActive()) {
+		this->setActivity(false);
+	}
+
 	Figure::setRotationSpeed(0);
 	Figure::setVelocity(0);
 	Figure::setLive(false);
@@ -156,11 +160,15 @@ sf::Color RhombToSfColorAdapter(RhombColors _color)
 
 void Model::addRandomRhomb()
 {
-	Rhombus* addedObject = new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20);
-	
-	this->switchActivityTo(addedObject);
-	this->objects.push_back(addedObject);
-	this->sortObjects();
+	if (this->accessObjects().size() == 10)
+		this->accessObjects()[rand() % 10]->die();
+	else if (this->accessObjects().size() < 10) {
+		Rhombus* addedObject = new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20);
+
+		this->switchActivityTo(addedObject);
+		this->objects.push_back(addedObject);
+		this->sortObjects();
+	}
 }
 
 void Model::killActive()
@@ -169,7 +177,6 @@ void Model::killActive()
 	Figure* activeObject = this->accessActiveFigure();
 	if (activeObject != nullptr) {
 		activeObject->die();
-		activeObject->setActivity(false);
 		this->setActiveFigure(nullptr);
 	}
 	
