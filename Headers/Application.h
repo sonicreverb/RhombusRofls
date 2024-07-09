@@ -13,6 +13,6 @@ private:
 	View view;
 
 public: 
-	Aplication() : window(ScreenResolution::getDesktopMode(), "RhombusRofls"), model(), view(this->model, this->window), controller(this->model, this->view) { srand(time(NULL)); }
+	Aplication() : window(ScreenResolution::getDesktopMode(), "RhombusRofls"/*, sf::Style::Fullscreen*/), model(), view(this->model, this->window), controller(this->model, this->view) { srand(time(NULL)); }
 	void run();
 };

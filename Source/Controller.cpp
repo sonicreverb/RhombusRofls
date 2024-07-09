@@ -1,20 +1,28 @@
 #include "../Headers/Controller.h"
 #include "../Headers/ScreenResolution.h"
 
-#include <iostream>
-
 void Controller::update(float _deltaTime)
 {
     vector<Figure*>& modelObjects = this->model.accessObjects();
     if (!modelObjects.empty()) {
-        for (auto object : modelObjects) {
-            object->move(_deltaTime);
-            object->rotate(_deltaTime);
+        for (int id = 0; id < modelObjects.size(); id++) {
+            Figure* object = modelObjects[id];
 
-            if (object->getY() > ScreenResolution::getWindowHeight() + object->getSize() && object->getVelocity() > 0)
-                object->setCoords(object->getX(), 0 - object->getSize());
-            else if (object->getY() + object->getSize() < 0 && object->getVelocity() < 0)
-                object->setCoords(object->getX(), ScreenResolution::getWindowHeight() + object->getSize());
+            if (object->isAlive()) {
+                object->move(_deltaTime);
+                object->rotate(_deltaTime);
+
+                if (object->getY() > ScreenResolution::getWindowHeight() + object->getSize() && object->getVelocity() > 0)
+                    object->setCoords(object->getX(), 0 - object->getSize());
+                else if (object->getY() + object->getSize() < 0 && object->getVelocity() < 0)
+                    object->setCoords(object->getX(), ScreenResolution::getWindowHeight() + object->getSize());
+            }
+            else {
+                if (object->melt()) {
+                    modelObjects.erase(modelObjects.begin() + id);
+                    id--;
+                }
+            }
         }
     }
 }
@@ -53,6 +61,15 @@ void Controller::handleInput() {
                 break;
             case sf::Keyboard::Escape:
                 view.accessWindow().close();
+                break;
+            case sf::Keyboard::Delete:
+                this->model.killActive();
+                break;
+            case sf::Keyboard::Left:
+                this->model.switchActivityLeft();
+                break;
+            case sf::Keyboard::Right:
+                this->model.switchActiviyRight();
                 break;
             default:
                 break;

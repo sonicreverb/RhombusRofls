@@ -30,6 +30,14 @@ void Figure::editRotationVelocity(float _value)
 	this->setRotationSpeed(currentRotationVelocity);
 }
 
+bool Figure::melt()
+{
+	sf::Color currentColor = this->getColor();
+	sf::Color newColor(currentColor.r, currentColor.g, currentColor.b, currentColor.a - 5);
+	this->setColor(newColor);
+	return newColor.a <= 0;
+}
+
 Rhombus::Rhombus(float _x, float _y, float _size)
 {
 	shape.setPointCount(4);
@@ -40,12 +48,13 @@ Rhombus::Rhombus(float _x, float _y, float _size)
 	shape.setPosition(_x, _y);
 
 	this->setSize(_size);
-	this->setColor(RhombToSfColorAdapter(static_cast<RhombColors>(rand() % 6)));
+ 	this->setColor(RhombToSfColorAdapter(static_cast<RhombColors>(rand() % 5)));
 	this->setActivity(false);
 
 	Figure::setRotationSpeed(100);
 	Figure::setVelocity(ScreenResolution::getWindowHeight() / 7);
 	Figure::setScale(1.f);
+	Figure::setLive(true);
 }
 
 void Rhombus::move(float _deltaTime)
@@ -105,6 +114,22 @@ void Rhombus::setCoords(sf::Vector2f _coords)
 	this->shape.setPosition(_coords);
 }
 
+bool Rhombus::melt()
+{
+	if (!Figure::melt()) {
+		this->shape.setFillColor(this->getColor());
+		return false;
+	} 
+	else return true;
+}
+
+void Rhombus::die()
+{
+	Figure::setRotationSpeed(0);
+	Figure::setVelocity(0);
+	Figure::setLive(false);
+}
+
 sf::Color RhombToSfColorAdapter(RhombColors _color)
 {
 	switch (_color)
@@ -124,9 +149,6 @@ sf::Color RhombToSfColorAdapter(RhombColors _color)
 	case RhombColors::Passive5:
 		return sf::Color(91, 98, 122, 255);
 		break;
-	case RhombColors::Active:
-		return sf::Color(200, 20, 0, 255);
-		break;
 	default:
 		break;
 	}
@@ -136,12 +158,88 @@ void Model::addRandomRhomb()
 {
 	Rhombus* addedObject = new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20);
 	
+	this->switchActivityTo(addedObject);
+	this->objects.push_back(addedObject);
+	this->sortObjects();
+}
+
+void Model::killActive()
+{
+
+	Figure* activeObject = this->accessActiveFigure();
+	if (activeObject != nullptr) {
+		activeObject->die();
+		activeObject->setActivity(false);
+		this->setActiveFigure(nullptr);
+	}
+	
+}
+
+void Model::sortObjects()
+{
+	std::sort(objects.begin(), objects.end(), [](Figure* a, Figure* b) {
+		return a->getCoords().x < b->getCoords().x;
+		});
+}
+
+int Model::getActiveObjectID()
+{
+	Figure* activeFigure = this->accessActiveFigure();
+	if (activeFigure == nullptr)
+		return -1;
+	else {
+		auto objects = this->accessObjects();
+		for (int id = 0; id < objects.size(); id++)
+			if (activeFigure == objects[id]) return id;
+
+		return -1;
+	}
+}
+
+void Model::switchActivityTo(Figure* _figure)
+{
 	Figure* activeObject = this->accessActiveFigure();
 	if (activeObject != nullptr)
 		activeObject->setActivity(false);
 
-	this->setActiveFigure(addedObject);
-	addedObject->setActivity(true);
+	this->setActiveFigure(_figure);
+	_figure->setActivity(true);
+}
 
-	this->objects.push_back(addedObject);
+void Model::switchActivityLeft()
+{
+	int currentActiveID = this->getActiveObjectID();
+	if (currentActiveID != -1) {
+		if (currentActiveID == 0)
+			currentActiveID = this->objects.size() - 1;
+		else
+			currentActiveID -= 1;
+
+		switchActivityTo(this->accessObjects()[currentActiveID]);
+	}
+	else {
+		if (!this->objects.empty()) {
+			currentActiveID = 0;
+			switchActivityTo(this->accessObjects()[currentActiveID]);
+		}
+	}
+}
+
+void Model::switchActiviyRight()
+{
+	int currentActiveID = this->getActiveObjectID();
+	if (currentActiveID != -1) {
+		if (currentActiveID == this->objects.size() - 1)
+			currentActiveID = 0;
+		else
+			currentActiveID += 1;
+
+		switchActivityTo(this->accessObjects()[currentActiveID]);
+	}
+	else {
+		if (!this->objects.empty()) {
+			currentActiveID = this->objects.size() - 1;
+			switchActivityTo(this->accessObjects()[currentActiveID]);
+		}
+	}
 }
