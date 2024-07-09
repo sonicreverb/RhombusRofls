@@ -11,7 +11,26 @@ void Figure::setSize(float _size)
 	this->size = _size;
 }
 
-Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(100), velocity(ScreenResolution::getWindowHeight() / 7), scale(1.f)
+void Figure::setScale(float _scale)
+{
+	this->scale = _scale;
+}
+
+void Figure::editVelocity(float _value)
+{
+	float currentVelocity = this->getVelocity();
+	currentVelocity += _value;
+	this->setVelocity(currentVelocity);
+}
+
+void Figure::editRotationVelocity(float _value)
+{
+	float currentRotationVelocity = this->getRotationSpeed();
+	currentRotationVelocity += _value;
+	this->setRotationSpeed(currentRotationVelocity);
+}
+
+Rhombus::Rhombus(float _x, float _y, float _size)
 {
 	shape.setPointCount(4);
 	shape.setPoint(0, sf::Vector2f(-_size / 2, 0));
@@ -23,11 +42,15 @@ Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(100), velocity(
 	this->setSize(_size);
 	this->setColor(RhombToSfColorAdapter(static_cast<RhombColors>(rand() % 6)));
 	this->setActivity(false);
+
+	Figure::setRotationSpeed(100);
+	Figure::setVelocity(ScreenResolution::getWindowHeight() / 7);
+	Figure::setScale(1.f);
 }
 
 void Rhombus::move(float _deltaTime)
 {
-	this->shape.move(0, this->velocity * _deltaTime);
+	this->shape.move(0, this->getVelocity() * _deltaTime);
 	this->updateCoords();
 }
 
@@ -42,7 +65,8 @@ void Rhombus::display(sf::RenderWindow& _window)
 	_window.draw(this->shape);
 	if (this->isActive()) {
 		sf::ConvexShape activityShape = this->shape;
-		activityShape.setScale(0.8, 0.8);
+		float shapeScale = Figure::getScale();
+		activityShape.setScale(0.8 * shapeScale, 0.8 * shapeScale);
 		activityShape.setFillColor(sf::Color::White);
 		_window.draw(activityShape);
 	}
@@ -50,7 +74,7 @@ void Rhombus::display(sf::RenderWindow& _window)
 
 void Rhombus::rotate(float _deltaTime)
 {
-	this->shape.rotate(this->rotationAngle * _deltaTime);
+	this->shape.rotate(this->getRotationSpeed() * _deltaTime);
 }
 
 void Rhombus::setColor(sf::Color _color)
@@ -61,8 +85,24 @@ void Rhombus::setColor(sf::Color _color)
 
 void Rhombus::setScale(float _scale)
 {
-	this->scale = _scale;
-	this->shape.setScale(_scale, _scale);
+	float currentScale = Figure::getScale();
+	float currentSize = Figure::getSize();
+	float newScale = currentScale * _scale;
+	Figure::setScale(newScale);
+	Figure::setSize(currentSize * _scale);
+	this->shape.setScale(newScale, newScale);
+}
+
+void Rhombus::setCoords(float _x, float _y)
+{
+	Figure::setCoords(_x, _y);
+	this->shape.setPosition(_x, _y);
+}
+
+void Rhombus::setCoords(sf::Vector2f _coords)
+{
+	Figure::setCoords(_coords);
+	this->shape.setPosition(_coords);
 }
 
 sf::Color RhombToSfColorAdapter(RhombColors _color)

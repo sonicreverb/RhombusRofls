@@ -12,6 +12,10 @@ private:
 	sf::Color color;
 	bool activity;
 
+	float scale;
+	float velocity;
+	float rotationSpeed;
+
 public:
 	virtual void move(float _deltaTime) = 0;
 	virtual void move(float _offsetX, float _offsetY) = 0;
@@ -23,12 +27,21 @@ public:
 	double getY() { return this->coords.y; }
 	float getSize() { return this->size; }
 	bool isActive() { return this->activity; }
+	float getScale() { return this->scale; }
+	float getVelocity() { return this->velocity; }
+	float getRotationSpeed() { return this->rotationSpeed; }
 
-	void setCoords(float x, float y) { this->coords = sf::Vector2f(x, y); }
-	void setCoords(sf::Vector2f _coords) { this->coords = _coords; }
+	virtual void setCoords(float x, float y) { this->coords = sf::Vector2f(x, y); }
+	virtual void setCoords(sf::Vector2f _coords) { this->coords = _coords; }
 	virtual void setColor(sf::Color _color);
 	void setSize(float _size);
+	virtual void setScale(float _scale);
 	void setActivity(bool _activity) { this->activity = _activity; }
+	void setVelocity(float _velocity) { this->velocity = _velocity; }
+	void setRotationSpeed(float _angle) { this->rotationSpeed = _angle; }
+
+	void editVelocity(float _value);
+	void editRotationVelocity(float _value);
 };
 
 enum class RhombColors {
@@ -45,9 +58,6 @@ sf::Color RhombToSfColorAdapter(RhombColors _color);
 class Rhombus : public Figure {
 private:
 	sf::ConvexShape shape;
-	float scale;
-	float velocity;
-	float rotationAngle;
 public:
 	Rhombus(float _x, float _y, float _size);
 
@@ -59,7 +69,9 @@ public:
 	sf::ConvexShape& accessShape() { return this->shape; }
 
 	void setColor(sf::Color _color) override;
-	void setScale(float scale);
+	void setScale(float scale) override;
+	void setCoords(float _x, float _y) override;
+	void setCoords(sf::Vector2f _coords) override;
 	void updateCoords() { this->setCoords(this->shape.getPosition()); }
 };
 
