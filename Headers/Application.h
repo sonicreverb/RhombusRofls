@@ -2,7 +2,7 @@
 #include "Model.h"
 #include "Controller.h"
 #include "View.h"
-
+#include "ScreenResolution.h"
 
 class Aplication {
 private:	
@@ -13,7 +13,6 @@ private:
 	View view;
 
 public: 
-	// todo dynamic screen resolution
-	Aplication(): window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "RhombusRofls"), model(), view(this->model, this->window), controller(this->model, this->view) {} 
+	Aplication() : window(ScreenResolution::getDesktopMode(), "RhombusRofls", sf::Style::Fullscreen), model(), view(this->model, this->window), controller(this->model, this->view) { srand(time(NULL)); }
 	void run();
 };

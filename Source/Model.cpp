@@ -1,4 +1,5 @@
 #include "../Headers/Model.h"
+#include "../Headers/ScreenResolution.h"
 
 void Figure::setColor(sf::Color _color)
 {
@@ -10,7 +11,7 @@ void Figure::setSize(float _size)
 	this->size = _size;
 }
 
-Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(0.2), scale(1.f)
+Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(0.2), velocity(ScreenResolution::getWindowHeight() / 700), scale(1.f)
 {
 	shape.setPointCount(4);
 	shape.setPoint(0, sf::Vector2f(-_size / 2, 0));
@@ -21,6 +22,12 @@ Rhombus::Rhombus(float _x, float _y, float _size): rotationAngle(0.2), scale(1.f
 
 	this->setSize(_size);
 	this->setColor(RhombToSfColorAdapter(static_cast<RhombColors>(rand() % 6)));
+}
+
+void Rhombus::move()
+{
+	this->shape.move(0, this->velocity);
+	this->updateCoords();
 }
 
 void Rhombus::move(float _offsetX, float _offsetY)
@@ -80,5 +87,5 @@ sf::Color RhombToSfColorAdapter(RhombColors _color)
 
 void Model::addRandomRhomb()
 {
-	this->objects.push_back(new Rhombus(rand() % 1920, rand() % 1080, 100)); // todo dynamic screen resolution
+	this->objects.push_back(new Rhombus(rand() % ScreenResolution::getWindowWidth(), rand() % ScreenResolution::getWindowHeight(), ScreenResolution::getWindowHeight() / 20));
 }

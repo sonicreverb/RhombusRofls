@@ -137,6 +137,7 @@
     <ClInclude Include="Headers\Application.h" />
     <ClInclude Include="Headers\Controller.h" />
     <ClInclude Include="Headers\Model.h" />
+    <ClInclude Include="Headers\ScreenResolution.h" />
     <ClInclude Include="Headers\View.h" />
   </ItemGroup>
   <ItemGroup>
@@ -144,6 +145,7 @@
     <ClCompile Include="Source\Controller.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Model.cpp" />
+    <ClCompile Include="Source\ScreenResolution.cpp" />
     <ClCompile Include="Source\View.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

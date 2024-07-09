@@ -1,16 +1,16 @@
 #include "../Headers/Controller.h"
-#include <iostream>
+#include "../Headers/ScreenResolution.h"
 
 void Controller::update()
 {
     vector<Figure*>& modelObjects = this->model.accessObjects();
     if (!modelObjects.empty()) {
         for (auto object : modelObjects) {
-            object->move(0, 0.5);
+            object->move();
             object->rotate();
 
-            if (object->getY() + object->getSize() > 1080) // todo dynamic resolution
-                object->move(0, -1 * (object->getY() + object->getSize() > 1080));
+            if (object->getY() - object->getSize() > ScreenResolution::getWindowHeight())
+                object->move(0, -1 * (object->getY() + object->getSize()));
         }
             
     }

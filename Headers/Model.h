@@ -12,6 +12,7 @@ private:
 	sf::Color color;
 
 public:
+	virtual void move() = 0;
 	virtual void move(float offsetX, float offsetY) = 0;
 	virtual void rotate() = 0;
 	virtual void display(sf::RenderWindow& window) = 0;
@@ -42,10 +43,12 @@ class Rhombus : public Figure {
 private:
 	sf::ConvexShape shape;
 	float scale;
+	float velocity;
 	float rotationAngle;
 public:
 	Rhombus(float x, float y, float size);
 
+	void move() override;
 	void move(float offsetX, float offsetY) override;
 	void display(sf::RenderWindow& window) override;
 	void rotate() override;
